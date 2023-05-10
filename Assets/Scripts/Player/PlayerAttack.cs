@@ -1,3 +1,4 @@
+using Enemies;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,10 +12,14 @@ namespace Player
         [SerializeField] private float _attackRange = 0.5f;
         [SerializeField] private LayerMask _enemyLayer;
 
+        [SerializeField] private int _attackDamage = 50;
+        [SerializeField] private float _attackRate = 2f;
+        private float _nextAttackTime = 0f;
+
         private Animator _animator;
         private Rigidbody2D _rb;
 
-        [HideInInspector] public bool isAttacking = false;
+        [HideInInspector] public static bool isAttacking = false;
 
         private void Awake()
         {
@@ -27,13 +32,25 @@ namespace Player
             StartCoroutine(CheckAttackInput());
         }
 
+        private void OnDrawGizmosSelected()
+        {
+            if (_attackPoint == null)
+                return;
+
+            Gizmos.DrawWireSphere(_attackPoint.position, _attackRange);
+            Gizmos.DrawWireSphere(_attackPoint2.position, _attackRange);
+        }
+
         private IEnumerator CheckAttackInput()
         {
-            if (Input.GetMouseButtonDown(0))
+            if(Time.time >= _nextAttackTime)
             {
-                Attack();
+                if (Input.GetMouseButtonDown(0) && PlayerJump.isGrounded)
+                {
+                    Attack();
+                    _nextAttackTime = Time.time + 1f / _attackRate;
+                }
             }
-
 
             yield return null;
             StartCoroutine(CheckAttackInput());
@@ -44,11 +61,28 @@ namespace Player
             // Play an attack anim
             isAttacking = true;
             _animator.SetTrigger(AnimationStates.isAttacking);
+            //DrawCircleAndDamgeEnemies is calling as animation event
             _rb.velocity = new Vector2(0f, _rb.velocity.y);
-            // Detect enemies in range
+
+        }
+
+        public void DrawCircleAndDamageToEnemies()
+        {
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(_attackPoint.position, _attackRange, _enemyLayer);
-            // Damage them
+            Collider2D[] hitEnemies2 = Physics2D.OverlapCircleAll(_attackPoint2.position, _attackRange, _enemyLayer);
+            List<Collider2D> empty = new();
+
+            for (int i = 0; i < hitEnemies.Length; i++)
+            {
+                hitEnemies[i].GetComponent<Enemy>().TakeDamage(_attackDamage);
+                empty.Add(hitEnemies[i]);
+            }
+
+            for (int i = 0; i < hitEnemies2.Length; i++)
+            {
+                if (!empty.Contains(hitEnemies2[i]))
+                    hitEnemies2[i].GetComponent<Enemy>().TakeDamage(_attackDamage);
+            }
         }
     }
-
 }

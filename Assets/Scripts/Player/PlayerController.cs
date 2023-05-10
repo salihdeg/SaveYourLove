@@ -13,8 +13,6 @@ namespace Player
 
         private Rigidbody2D _rb;
         private Animator _animator;
-        private PlayerJump _playerJump;
-        private PlayerAttack _playerAttack;
 
         private bool _isBlocking = false;
 
@@ -22,8 +20,6 @@ namespace Player
         {
             _rb = GetComponent<Rigidbody2D>();
             _animator = GetComponentInChildren<Animator>();
-            _playerJump = GetComponentInChildren<PlayerJump>();
-            _playerAttack = GetComponent<PlayerAttack>();
         }
 
         private void Start()
@@ -38,7 +34,7 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (!_isBlocking && !_playerAttack.isAttacking)
+            if (!_isBlocking && !PlayerAttack.isAttacking)
                 Move(_xInput);
         }
 

@@ -13,8 +13,8 @@ namespace Player
         [Header("Attribures")]
         [SerializeField] private float _jumpForce = 7.0f;
         [SerializeField] private float _jumpTime = 0.3f;
-        [SerializeField] public bool isJumping;
-        [SerializeField] public bool isGrounded = true;
+        [SerializeField] public bool isJumping = false;
+        [SerializeField] public static bool isGrounded = true;
 
         private float _jumpTimeCounter;
         private float _coyoteTime = 0.2f;
@@ -41,6 +41,8 @@ namespace Player
         #region Jump
         private void JumpController()
         {
+            if (PlayerAttack.isAttacking)
+                return;
             Coyote();
             JumpBuffer();
 
