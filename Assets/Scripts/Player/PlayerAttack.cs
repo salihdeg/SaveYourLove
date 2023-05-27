@@ -74,14 +74,22 @@ namespace Player
 
             for (int i = 0; i < hitEnemies.Length; i++)
             {
-                hitEnemies[i].GetComponent<Enemy>().TakeDamage(_attackDamage);
-                empty.Add(hitEnemies[i]);
+                if (hitEnemies[i].TryGetComponent(out Enemy enemy))
+                {
+                    enemy.TakeDamage(_attackDamage);
+                    empty.Add(hitEnemies[i]);
+                }
             }
 
             for (int i = 0; i < hitEnemies2.Length; i++)
             {
                 if (!empty.Contains(hitEnemies2[i]))
-                    hitEnemies2[i].GetComponent<Enemy>().TakeDamage(_attackDamage);
+                {
+                    if (hitEnemies2[i].TryGetComponent(out Enemy enemy))
+                    {
+                        enemy.TakeDamage(_attackDamage);
+                    }
+                }
             }
         }
     }

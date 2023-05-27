@@ -14,7 +14,7 @@ namespace Player
         private Rigidbody2D _rb;
         private Animator _animator;
 
-        private bool _isBlocking = false;
+        public static bool isBlocking = false;
 
         private void Awake()
         {
@@ -34,7 +34,7 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (!_isBlocking && !PlayerAttack.isAttacking)
+            if (!isBlocking && !PlayerAttack.isAttacking)
                 Move(_xInput);
         }
 
@@ -80,10 +80,10 @@ namespace Player
         private void BlockingAnimation()
         {
             if (Input.GetMouseButtonDown(1))
-                _isBlocking = true;
+                isBlocking = true;
             else if (Input.GetMouseButtonUp(1))
-                _isBlocking = false;
-            _animator.SetBool(AnimationStates.isBlocking, _isBlocking);
+                isBlocking = false;
+            _animator.SetBool(AnimationStates.isBlocking, isBlocking);
         }
     }
 }

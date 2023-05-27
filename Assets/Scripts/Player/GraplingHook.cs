@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GraplingHook : MonoBehaviour
@@ -8,6 +7,7 @@ public class GraplingHook : MonoBehaviour
     private Camera _camera;
     private LineRenderer _lineRenderer;
     private DistanceJoint2D _distanceJoint;
+    [SerializeField] private LayerMask _hookHandle;
 
     private void Start()
     {
