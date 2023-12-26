@@ -10,6 +10,7 @@ namespace Player
         [SerializeField] private int _maxHealth;
         private HealthSystem _healthSystem;
         private Animator _animator;
+        public static bool isDead = false;
 
         private void Awake()
         {
@@ -17,9 +18,15 @@ namespace Player
             _healthSystem.OnDead += Die;
             _animator = GetComponentInChildren<Animator>();
         }
+        private void Start()
+        {
+            _healthSystem.HealComplete();
+        }
 
         public void TakeDamage(int damage)
         {
+            if (isDead) return;
+
             if (PlayerController.isBlocking)
             {
                 damage /= 5;
@@ -34,14 +41,24 @@ namespace Player
 
         public void Die(object sender, System.EventArgs e)
         {
+            if (isDead) return;
+
             _animator.SetTrigger("Die");
-            Destroy(gameObject, 2.5f);
-            this.enabled = false;
+            isDead = true;
+            PlayerController.isStop = true;
+            StartCoroutine(LoadScene());
         }
 
         public HealthSystem GetHealthSystem()
         {
             return _healthSystem;
+        }
+        private IEnumerator LoadScene()
+        {
+            yield return new WaitForSeconds(3f);
+            PlayerController.isStop = false;
+            isDead = false;
+            SceneChanger.RestartScene();
         }
     }
 }

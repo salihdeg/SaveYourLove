@@ -6,9 +6,9 @@ namespace Enemies
     public class Enemy : MonoBehaviour, IGetHealthSystem
     {
         private HealthSystem _healthSystem;
-        [SerializeField] private int _maxHealth = 100;
-        private int _currentHealth;
         private Animator _animator;
+        [SerializeField] private int _maxHealth = 100;
+        [SerializeField] private float _deathTime = 2f;
 
         private void Awake()
         {
@@ -20,18 +20,20 @@ namespace Enemies
         public void TakeDamage(int damage)
         {
             _healthSystem.Damage(damage);
-            _animator.SetTrigger("Hurt");
+            if (_animator != null)
+                _animator.SetTrigger("Hurt");
         }
 
         private void Die()
         {
-            _animator.SetTrigger("Death");
+            if (_animator != null)
+                _animator.SetTrigger("Death");
             GetComponent<Collider2D>().enabled = false;
-            Destroy(gameObject, 2f);
+            Destroy(gameObject, _deathTime);
             enabled = false;
         }
 
-        private void HealthSystem_OnDead(object sender, System.EventArgs e)
+        public void HealthSystem_OnDead(object sender, System.EventArgs e)
         {
             Die();
         }

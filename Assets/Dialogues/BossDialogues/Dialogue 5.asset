@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299e54640b7105f4880d445fdf84515e, type: 3}
+  m_Name: Dialogue 5
+  m_EditorClassIdentifier: 
+  speakerName: Sen
+  faceImage: {fileID: 21300000, guid: a1a47e5f2ab79d643880f808dc933502, type: 3}
+  dialogue: Ben oyun oynamaya gelmedim!
+  answers: []
+  trueAnswerIndex: 0
+  isQuestion: 0

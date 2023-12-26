@@ -41,8 +41,12 @@ namespace Player
         #region Jump
         private void JumpController()
         {
-            if (PlayerAttack.isAttacking)
-                return;
+            if (PlayerController.isStop) return;
+
+            if (PlayerAttack.isAttacking) return;
+
+            if (PlayerDash.isDashing) return;
+
             Coyote();
             JumpBuffer();
 

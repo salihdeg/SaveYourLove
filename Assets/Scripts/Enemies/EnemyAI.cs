@@ -10,6 +10,7 @@ namespace Enemies
         [SerializeField] private float _speed = 5f;
         [SerializeField] private float _attackDistance;
         [SerializeField] private float _detectDistance = 0.5f;
+        [SerializeField] Transform _healthBar;
         private Animator _animator;
 
         private bool _canRun = true;
@@ -38,10 +39,14 @@ namespace Enemies
             if (direction.x > 0)
             {
                 transform.localScale = new Vector3(-1f, 1f, 1f);
+                if(_healthBar!=null)
+                    _healthBar.localScale = new Vector3(-1f, 1f, 1f);
             }
             else if (direction.x < 0)
             {
                 transform.localScale = new Vector3(1f, 1f, 1f);
+                if (_healthBar != null)
+                    _healthBar.localScale = new Vector3(1f, 1f, 1f);
             }
 
             direction.Normalize(); // Vektörü normalize et

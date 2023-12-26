@@ -15,6 +15,7 @@ namespace Player
         private Animator _animator;
 
         public static bool isBlocking = false;
+        public static bool isStop = false;
 
         private void Awake()
         {
@@ -24,16 +25,36 @@ namespace Player
 
         private void Start()
         {
-            StartCoroutine(GetXInput());
+            //StartCoroutine(GetXInput());
         }
 
         private void Update()
         {
+            if (isStop)
+            {
+                _xInput = 0;
+                RunAnimation(_xInput);
+                return;
+            }
+            if (PlayerDash.isDashing) return;
+
+            _xInput = Input.GetAxis("Horizontal");
+
             BlockingAnimation();
+
+            TurnPlayer(_xInput);
+            RunAnimation(_xInput);
         }
 
         private void FixedUpdate()
         {
+            if (isStop)
+            {
+                _rb.velocity = new Vector2(0, _rb.velocity.y);
+                return;
+            }
+            if (PlayerDash.isDashing) return;
+
             if (!isBlocking && !PlayerAttack.isAttacking)
                 Move(_xInput);
         }
@@ -46,13 +67,22 @@ namespace Player
 
         private IEnumerator GetXInput()
         {
-            _xInput = Input.GetAxis("Horizontal");
+            if (isStop)
+            {
+                RunAnimation(_xInput);
+                yield return null;
+                StartCoroutine(GetXInput());
+            }
+            else
+            {
+                _xInput = Input.GetAxis("Horizontal");
 
-            TurnPlayer(_xInput);
-            RunAnimation(_xInput);
+                TurnPlayer(_xInput);
+                RunAnimation(_xInput);
 
-            yield return null;
-            StartCoroutine(GetXInput());
+                yield return null;
+                StartCoroutine(GetXInput());
+            }
         }
 
         private void RunAnimation(float input)

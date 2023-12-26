@@ -43,17 +43,25 @@ namespace Player
 
         private IEnumerator CheckAttackInput()
         {
-            if(Time.time >= _nextAttackTime)
+            if (!PlayerController.isStop)
             {
-                if (Input.GetMouseButtonDown(0) && PlayerJump.isGrounded)
+                if (Time.time >= _nextAttackTime)
                 {
-                    Attack();
-                    _nextAttackTime = Time.time + 1f / _attackRate;
+                    if (Input.GetMouseButtonDown(0) && PlayerJump.isGrounded)
+                    {
+                        Attack();
+                        _nextAttackTime = Time.time + 1f / _attackRate;
+                    }
                 }
-            }
 
-            yield return null;
-            StartCoroutine(CheckAttackInput());
+                yield return null;
+                StartCoroutine(CheckAttackInput());
+            }
+            else
+            {
+                yield return null;
+                StartCoroutine(CheckAttackInput());
+            }
         }
 
         private void Attack()
